@@ -1,0 +1,147 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Bandwise – Tự học IELTS</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap">
+<style>
+:root{--bg:#f5f7fb;--cd:#fff;--ink:#10233a;--mu:#5b6b80;--ln:#dbe3ee;--pr:#2149d8;--on:#fff;--hi:#ffe27a;--hk:#3a2e00;--ok:#14804a;--bd:#c23b3b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1520;--cd:#16212f;--ink:#e8eef6;--mu:#9aabc0;--ln:#27364a;--pr:#7da0ff;--on:#0d1520;--hi:#4a3d00;--hk:#ffe27a;--ok:#4cc58a;--bd:#ff8080}}
+:root[data-theme=dark]{--bg:#0d1520;--cd:#16212f;--ink:#e8eef6;--mu:#9aabc0;--ln:#27364a;--pr:#7da0ff;--on:#0d1520;--hi:#4a3d00;--hk:#ffe27a;--ok:#4cc58a;--bd:#ff8080}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 'Be Vietnam Pro',system-ui,sans-serif}
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--ln);background:var(--cd);flex-wrap:wrap}
+.lg{font-weight:800;font-size:20px;letter-spacing:-.02em}
+nav{display:flex;gap:4px;overflow-x:auto;flex:1;max-width:100%}nav a{padding:6px 12px;border-radius:8px;color:var(--mu);text-decoration:none;white-space:nowrap;font-weight:500}nav a.on{background:var(--ink);color:var(--bg)}
+#bn{margin:0;padding:8px 16px;background:var(--hi);color:var(--hk);font-weight:500}
+main{max-width:860px;margin:0 auto;padding:20px 16px 60px}
+.c{background:var(--cd);border:1px solid var(--ln);border-radius:12px;padding:16px;margin:0 0 12px}
+h1{font-size:26px;letter-spacing:-.02em;margin:4px 0 12px}h2{font-size:17px;margin:0 0 8px}
+button,select,input,textarea{font:inherit;color:inherit}
+.b{background:var(--pr);color:var(--on);border:0;border-radius:8px;padding:9px 16px;font-weight:700;cursor:pointer}.b.g{background:transparent;color:var(--ink);border:1px solid var(--ln)}
+textarea,input,select{width:100%;background:var(--bg);border:1px solid var(--ln);border-radius:8px;padding:9px}textarea{min-height:200px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.hl{background:var(--hi);color:var(--hk);padding:0 6px;border-radius:4px}.mu{color:var(--mu);font-size:13px}.bn{font-size:32px;font-weight:800;margin:4px 0}
+.ok{color:var(--ok)}.no{color:var(--bd)}.nc{user-select:none}.qq{font-size:18px;font-weight:500}
+a.t{display:flex;gap:10px;text-decoration:none;color:inherit}:focus-visible{outline:2px solid var(--pr);outline-offset:2px}
+#ts{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px}
+</style></head><body>
+<header><span class=lg>Bandwise</span><nav id=nv></nav><span class=mu id=sk></span><button class="b g" id=th>Sáng/Tối</button></header>
+<p id=bn hidden></p><main id=app></main><div id=ts hidden></div>
+<script>
+const $=s=>document.querySelector(s),AP=$('#app');
+const E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const loc=(o=0)=>new Date(Date.now()+o-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10),td=()=>loc();
+let S;try{S=JSON.parse(localStorage.getItem('bw1'))}catch(e){}
+S=S||{p:null,dn:{},st:0,ls:'',v:{},sc:{},ex:[]};
+const sv=()=>{try{localStorage.setItem('bw1',JSON.stringify(S))}catch(e){}};
+const toast=m=>{const t=$('#ts');t.textContent=m;t.hidden=0;setTimeout(()=>t.hidden=1,3500)};
+const pk=a=>a[Math.floor(Math.random()*a.length)];
+const TL={v:['Ôn từ vựng đến hạn','#/vocab','Từ vựng'],w:['Viết bài và nhận chấm AI','#/writing','Writing'],sp:['Nói Impromptu 3 part','#/speaking','Speaking'],m:['Mini mock Reading hoặc Listening','#/mock','Mock']};
+const wk=()=>{const k=Object.keys(S.sc);if(!k.length)return'w';const m=k.sort((a,b)=>S.sc[a]-S.sc[b])[0];return{writing:'w',speaking:'sp',reading:'m',listening:'m'}[m]};
+const wp=()=>{const x=wk();return[['w'],['sp'],['m'],[x],['w','sp'],['m'],[x]]};
+const dI=()=>(new Date().getDay()+6)%7,tasks=()=>['v',...new Set(wp()[dI()])];
+function mark(id){(S.dn[td()]=S.dn[td()]||{})[id]=1;if(tasks().every(t=>S.dn[td()][t])&&S.ls!==td()){S.st=S.ls===loc(-864e5)?S.st+1:1;S.ls=td();toast('Xong nhiệm vụ hôm nay. Chuỗi '+S.st+' ngày!')}sv();hd()}
+let nt=0;function hd(){$('#sk').textContent='Chuỗi '+S.st+' ngày';const n=S.p?tasks().filter(t=>!(S.dn[td()]||{})[t]).length:0;$('#bn').hidden=!n;$('#bn').textContent='Hôm nay còn '+n+' nhiệm vụ. Hoàn thành hết để giữ chuỗi học.';if(n&&!nt&&window.Notification&&Notification.permission==='granted'){nt=1;new Notification('Bandwise','Hôm nay bạn còn '+n+' nhiệm vụ chưa học.')}}
+const NV=[['plan','Lộ trình'],['vocab','Từ vựng'],['writing','Writing'],['speaking','Speaking'],['mock','Thi thử'],['tools','Band'],['chat','Hỏi AI']];
+$('#nv').innerHTML=NV.map(n=>`<a href="#/${n[0]}">${n[1]}</a>`).join('');
+$('#th').onclick=()=>{const d=document.documentElement,dk=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;d.dataset.theme=dk?'light':'dark'};
+const P={};function go(){const h=(location.hash||'#/plan').slice(2);document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#/'+h));try{speechSynthesis.cancel()}catch(e){}(P[h]||P.plan)();scrollTo(0,0)}addEventListener('hashchange',go);
+async function cam(){try{const s=await navigator.mediaDevices.getUserMedia({video:true}),v=document.createElement('video');v.srcObject=s;v.muted=v.autoplay=v.playsInline=true;v.style.cssText='position:fixed;right:8px;bottom:8px;width:120px;border-radius:8px;z-index:9';document.body.append(v);toast('Camera chỉ hiển thị trên máy bạn, không ghi hình.')}catch(e){toast('Không bật được camera')}}
+
+/* LỘ TRÌNH */
+const bs=x=>[4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9].map(n=>`<option ${n==x?'selected':''}>${n}`).join('');
+P.plan=()=>{if(!S.p){AP.innerHTML=`<h1>Lên lộ trình cho bạn</h1><div class=c><div class=g2><label>Band hiện tại<select id=a>${bs(5)}</select></label><label>Band mục tiêu<select id=b>${bs(7)}</select></label><label>Ngày thi<input id=d type=date></label><label>Phút học mỗi ngày<select id=m><option>30<option>60<option>90<option>120</select></label></div><p><button class=b id=ok>Tạo lộ trình</button></p></div>`;$('#ok').onclick=()=>{S.p={a:+$('#a').value,b:+$('#b').value,d:$('#d').value,m:+$('#m').value,s:td()};sv();hd();P.plan()};return}
+const d=S.dn[td()]||{},p=S.p,left=p.d?Math.ceil((new Date(p.d)-Date.now())/864e5):null,wn=Math.floor((Date.parse(td())-Date.parse(p.s))/6048e5)+1,k=Object.keys(S.sc).sort((a,b)=>S.sc[a]-S.sc[b])[0];
+AP.innerHTML=`<h1>Lộ trình tuần ${wn}</h1><div class=c><p>Mục tiêu <span class=hl>${p.b}</span> từ ${p.a}${left>0?', còn '+left+' ngày đến ngày thi':''}. ${k?'Kỹ năng yếu nhất theo bài gần đây: <b>'+k+'</b> ('+S.sc[k]+'). Lộ trình đã dồn thêm buổi cho kỹ năng này.':'Làm bài đầu tiên để lộ trình bắt đầu tự điều chỉnh theo kết quả của bạn.'}</p><p class=mu>Học ${p.m} phút mỗi ngày. Chuỗi hiện tại: ${S.st} ngày.${S.st>=14?' 🏆 Huy hiệu 14 ngày':S.st>=7?' 🏅 Huy hiệu 7 ngày':' Đủ 7 ngày liên tiếp sẽ mở huy hiệu thưởng.'}</p></div><h2>Hôm nay</h2>${tasks().map(t=>`<a class="c t" href="${TL[t][1]}"><span>${d[t]?'✅':'⬜'}</span><b>${TL[t][0]}</b></a>`).join('')}<h2>Cả tuần</h2><div class=g2>${['T2','T3','T4','T5','T6','T7','CN'].map((n,i)=>`<div class=c style="margin:0;${i==dI()?'border-color:var(--pr)':''}"><b>${n}</b><br><span class=mu>${['v',...new Set(wp()[i])].map(t=>TL[t][2]).join(', ')}</span></div>`).join('')}</div><p class=row style="margin-top:14px"><button class="b g" id=nf>Bật nhắc học hằng ngày</button><button class="b g" id=rs>Tạo lại lộ trình</button></p><p class=mu>Nhắc học hoạt động khi bạn còn mở trang. Dữ liệu lưu trên trình duyệt này.</p>`;
+$('#nf').onclick=async()=>{if(!window.Notification)return toast('Trình duyệt không hỗ trợ thông báo');toast(await Notification.requestPermission()==='granted'?'Đã bật nhắc học':'Bạn đã từ chối thông báo')};$('#rs').onclick=()=>{S.p=null;sv();P.plan()}};
+
+/* TỪ VỰNG SRS */
+const V0=`mitigate|giảm nhẹ|Governments should mitigate the effects of climate change.|Environment
+sustainable|bền vững|We need sustainable sources of energy.|Environment
+deforestation|nạn phá rừng|Deforestation destroys the habitats of many species.|Environment
+renewable|có thể tái tạo|Renewable energy is becoming cheaper every year.|Environment
+curriculum|chương trình giảng dạy|The school revised its curriculum to include coding.|Education
+tuition fees|học phí|Rising tuition fees put pressure on students.|Education
+vocational|thuộc dạy nghề|Vocational training prepares students for specific jobs.|Education
+literacy|khả năng đọc viết|Literacy rates have improved significantly.|Education
+sedentary|ít vận động|A sedentary lifestyle increases health risks.|Health
+obesity|béo phì|Obesity is linked to fast food consumption.|Health
+preventive|mang tính phòng ngừa|Preventive care reduces long-term costs.|Health
+well-being|sức khỏe thể chất và tinh thần|Exercise improves overall well-being.|Health
+congestion|tắc nghẽn|Traffic congestion is a major problem in big cities.|Transport
+commute|đi làm hằng ngày|Many people commute for over an hour.|Transport
+infrastructure|cơ sở hạ tầng|Governments must invest in public infrastructure.|Transport
+widespread|phổ biến rộng rãi|The use of smartphones is now widespread.|Technology
+outweigh|vượt trội hơn|The benefits outweigh the drawbacks.|Essay
+detrimental|có hại|Too much screen time is detrimental to children.|Essay
+undeniable|không thể phủ nhận|There is an undeniable link between income and health.|Essay
+a growing number of|ngày càng nhiều|A growing number of people work from home.|Writing`.split('\n').map(l=>{const[w,m,e,t]=l.split('|');return{w,m,e,t}});
+const IV=[0,1,3,7,14,30,60];
+P.vocab=()=>{const t=td(),all=[...V0,...S.ex],due=all.filter(x=>!S.v[x.w]||S.v[x.w].d<=t).slice(0,10);let i=0;
+const draw=()=>{if(i>=due.length){if(due.length)mark('v');AP.innerHTML=`<h1>Từ vựng</h1><div class=c><h2>${due.length?'Xong phiên hôm nay':'Hôm nay không còn từ đến hạn'}</h2><p class=mu>Đã học ${Object.keys(S.v).length}/${all.length} từ. Từ nhớ tốt sẽ cách xa dần: 1, 3, 7, 14, 30 ngày. Từ quên sẽ quay lại ngay. Bạn có thể lưu thêm cụm từ từ bài Writing và Speaking đã chấm.</p></div>`;return}
+const x=due[i],bx=(S.v[x.w]||{b:0}).b,use=bx>=2&&x.t!=='Của bạn';
+AP.innerHTML=`<h1>Từ vựng</h1><p class=mu>Thẻ ${i+1}/${due.length} · ${E(x.t)} · ${use?'Vận dụng':'Nhận biết'}</p><div class=c>${use?`<p class=qq>${E(x.e.replace(new RegExp(x.w,'i'),'_____'))}</p><p class=mu>Gợi ý nghĩa: ${E(x.m)}</p><input id=an placeholder="Điền từ còn thiếu"><p><button class=b id=ck>Kiểm tra</button></p>`:`<p class=bn>${E(x.w)}</p><div id=rv></div><button class="b g" id=sh>Hiện nghĩa</button>`}<p id=fb></p></div>`;
+const rate=ok=>{const b=ok?Math.min(((S.v[x.w]||{}).b||0)+1,6):0;S.v[x.w]={b,d:loc(IV[b]*864e5)};sv();i++;draw()};
+if(use)$('#ck').onclick=()=>{const ok=$('#an').value.trim().toLowerCase()===x.w.toLowerCase();$('#fb').innerHTML=`<span class="${ok?'ok':'no'}">${ok?'Đúng':'Chưa đúng'}: <b>${E(x.w)}</b></span> <button class=b id=nx>Tiếp</button>`;$('#nx').onclick=()=>rate(ok)};
+else $('#sh').onclick=()=>{$('#rv').innerHTML=`<p><b>${E(x.m)}</b></p><p class=mu>${E(x.e)}</p><div class=row><button class="b g" id=fg>Quên</button><button class=b id=rm>Nhớ</button></div>`;$('#sh').hidden=1;$('#fg').onclick=()=>rate(0);$('#rm').onclick=()=>rate(1)}};draw()};
+
+/* CHẤM BÀI */
+async function grade(kind,prompt,text,extra){const tg=S.p?S.p.b:7,cr=kind==='Writing'?'Task Achievement/Response, Coherence and Cohesion, Lexical Resource, Grammatical Range and Accuracy':'Fluency and Coherence, Lexical Resource, Grammatical Range and Accuracy, Pronunciation (chỉ ước lượng từ transcript, nói rõ giới hạn)';
+const q=`Bạn là giám khảo IELTS ${kind} nghiêm khắc. Viết nhận xét bằng tiếng Việt, giữ nguyên trích dẫn tiếng Anh. Band mục tiêu của thí sinh: ${tg}.\nĐề: ${prompt}\nBài làm:\n${text}\n${extra||''}\nChấm theo 4 tiêu chí chính thức: ${cr}. Chỉ trả về JSON: {"overall":số,"criteria":[{"name":"","band":số,"look":"giám khảo nhìn vào điều gì","issues":[{"quote":"đoạn sai","fix":"bản sửa","why":"vì sao"}],"improve":"cần làm gì để đạt band mục tiêu"}],"rewrite":"viết lại chính bài của thí sinh ở band ${tg}, giữ ý của họ","phrases":[{"en":"","vi":""}]}`;
+try{const sm=window.claude&&await window.claude.use('sample');if(sm)return await sm.json(q)}catch(e){}return off(text,kind)}
+function off(t,k){const w=t.trim().split(/\s+/).filter(Boolean),n=w.length,u=new Set(w.map(x=>x.toLowerCase())).size/Math.max(n,1),ln=(t.match(/\b(however|moreover|furthermore|therefore|although|whereas|in addition|for example|as a result)\b/gi)||[]).length,b=Math.max(3.5,Math.min(7,Math.round((3.5+Math.min(n/(k==='Writing'?250:120),1)*2+u*1.5+Math.min(ln,5)*.2)*2)/2));
+return{overall:b,offline:1,criteria:['Task / Nội dung','Coherence','Lexical Resource','Grammar'].map(x=>({name:x,band:b,look:'Ước lượng từ độ dài ('+n+' từ), độ đa dạng từ ('+Math.round(u*100)+'%) và số từ nối ('+ln+')',issues:[],improve:'Mở trang trong Claude để AI chỉ lỗi chi tiết và viết lại bài.'})),rewrite:'',phrases:[]}}
+function show(r,el,skill,id){S.sc[skill]=+r.overall||0;sv();mark(id);
+el.innerHTML=`<div class=c><p class=mu>Band ước tính</p><p class=bn><span class=hl>${E(r.overall)}</span></p>${r.offline?'<p class=no>Đang dùng chế độ ước lượng, chưa có AI.</p>':''}</div>`+(r.criteria||[]).map(c=>`<div class=c><h2>${E(c.name)} <span class=hl>${E(c.band)}</span></h2><p class=mu>${E(c.look)}</p>${(c.issues||[]).map(i=>`<p><s class=no>${E(i.quote)}</s><br><b class=ok>${E(i.fix)}</b><br><span class=mu>${E(i.why)}</span></p>`).join('')}<p><b>Cần cải thiện:</b> ${E(c.improve)}</p></div>`).join('')+(r.rewrite?`<div class=c><h2>Bản viết lại từ chính ý của bạn</h2><p style="white-space:pre-wrap">${E(r.rewrite)}</p></div>`:'')+((r.phrases||[]).length?`<div class=c><h2>Cụm đáng lưu</h2>${r.phrases.map((p,i)=>`<p><span class=hl>${E(p.en)}</span> ${E(p.vi)} <button class="b g" data-i=${i}>Lưu vào từ vựng</button></p>`).join('')}</div>`:'');
+el.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{const p=r.phrases[b.dataset.i];S.ex.push({w:p.en,m:p.vi,e:p.en+'.',t:'Của bạn'});sv();b.textContent='Đã lưu';b.disabled=1})}
+
+/* WRITING */
+const WT=[['Task 1','The table shows the percentage of households with internet access in one country: 2005 - 35%; 2010 - 58%; 2015 - 79%; 2020 - 94%. Summarise the information by selecting and reporting the main features. Write at least 150 words.'],['Task 2','Some people think universities should focus on practical skills for work, while others believe academic knowledge is more important. Discuss both views and give your opinion. Write at least 250 words.'],['Task 2','In many cities, the number of private cars keeps increasing. What problems does this cause, and what solutions can you suggest? Write at least 250 words.']];
+P.writing=()=>{AP.innerHTML=`<h1>Writing</h1><div class=c><select id=ts2>${WT.map((w,i)=>`<option value=${i}>${w[0]}: ${E(w[1].slice(0,60))}…`).join('')}</select><p id=pr class=qq></p><textarea id=tx placeholder="Tự nghĩ ý, tự viết. Đừng học thuộc văn mẫu."></textarea><div class=row style="justify-content:space-between"><span class=mu id=wc>0 từ · 00:00</span><button class=b id=gr>Chấm bài</button></div></div><div id=rs></div>`;
+const pr=()=>$('#pr').textContent=WT[$('#ts2').value][1];pr();$('#ts2').onchange=pr;let t0=0;
+$('#tx').oninput=()=>{if(!t0)t0=Date.now();const s=Math.floor((Date.now()-t0)/1e3);$('#wc').textContent=($('#tx').value.trim().split(/\s+/).filter(Boolean).length)+' từ · '+String(Math.floor(s/60)).padStart(2,0)+':'+String(s%60).padStart(2,0)};
+$('#gr').onclick=async()=>{const t=$('#tx').value.trim();if(t.split(/\s+/).length<30)return toast('Hãy viết ít nhất 30 từ để chấm');$('#rs').innerHTML='<p class=mu>Đang chấm, khoảng vài giây…</p>';const w=WT[$('#ts2').value];show(await grade('Writing',w[0]+': '+w[1],t),$('#rs'),'writing','w')}};
+
+/* SPEAKING */
+const SQ={1:['Do you work or are you a student?','What do you usually do on weekends?','Do you prefer staying at home or going out?','How do you usually get to work or school?'],2:['Describe a person who has influenced you. Say who the person is, how you know them, what they did, and explain why they influenced you.','Describe a place you would like to visit. Say where it is, how you heard about it, what you would do there, and explain why you want to go.'],3:['Why do some people find it hard to change their habits?','Should governments spend more money on public transport?','How has technology changed the way people learn?']};
+let R,rc=0,sec=0,t0=0;
+function mic(tx,btn,inf){const C=window.SpeechRecognition||window.webkitSpeechRecognition;if(!C){inf.textContent='Trình duyệt chưa hỗ trợ nhận giọng nói. Hãy gõ câu trả lời.';return}
+if(rc){R.stop();return}R=new C();R.lang='en-US';R.continuous=true;R.interimResults=true;const base=tx.value;t0=Date.now();rc=1;btn.textContent='Dừng';
+R.onresult=e=>{let s='';for(const r of e.results)s+=r[0].transcript;tx.value=(base+' '+s).trim()};
+R.onend=()=>{rc=0;sec+=(Date.now()-t0)/1e3;btn.textContent='Bắt đầu nói';const n=tx.value.trim().split(/\s+/).filter(Boolean).length;if(sec>3)inf.textContent='Tốc độ: '+Math.round(n/(sec/60))+' từ/phút. Thi thật thường khoảng 110 đến 160.'};R.start()}
+const mbox=g=>`<div class=row><button class=b id=mc>Bắt đầu nói</button>${g?'<button class="b g" id=gr>Chấm bài nói</button>':''}</div><textarea id=tx style="min-height:120px;margin-top:8px" placeholder="Lời bạn nói hiện ở đây, có thể sửa hoặc gõ trực tiếp"></textarea><p class=mu id=inf></p>`;
+P.speaking=()=>{let mode='i';const draw=()=>{AP.innerHTML=`<h1>Speaking</h1><div class=row><button class="b ${mode=='i'?'':'g'}" id=m1>Impromptu</button><button class="b ${mode=='f'?'':'g'}" id=m2>Face-to-face với giám khảo</button></div><p class=mu>Mẹo A.R.E: Answer (trả lời thẳng), Reason (lý do), Example (ví dụ).</p><div id=bx></div><div id=rs></div>`;$('#m1').onclick=()=>{mode='i';draw()};$('#m2').onclick=()=>{mode='f';draw()};mode=='i'?imp():f2f()};draw()};
+function imp(){$('#bx').innerHTML=`<div class=c><div class=row>${[1,2,3].map(p=>`<button class="b g" data-p=${p}>Bốc Part ${p}</button>`).join('')}</div><p id=q class=qq>Bốc đề rồi nói ngay, không chuẩn bị.</p>${mbox(1)}</div>`;let cur='';
+document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{cur=pk(SQ[b.dataset.p]);$('#q').textContent=cur;$('#tx').value='';sec=0;$('#inf').textContent=''});
+$('#mc').onclick=()=>mic($('#tx'),$('#mc'),$('#inf'));
+$('#gr').onclick=async()=>{const t=$('#tx').value.trim(),n=t.split(/\s+/).filter(Boolean).length;if(!cur||n<8)return toast('Bốc đề và nói ít nhất vài câu');$('#rs').innerHTML='<p class=mu>Đang chấm…</p>';show(await grade('Speaking',cur,t,sec>3?'Tốc độ nói đo được: '+Math.round(n/(sec/60))+' WPM.':''),$('#rs'),'speaking','sp')}}
+function f2f(){const Q=[[1,SQ[1][0]],[1,pk(SQ[1].slice(1))],[2,pk(SQ[2])],[3,pk(SQ[3])],[3,pk(SQ[3])]];let i=0,an=[];
+$('#bx').innerHTML=`<div class=c><p class=mu>Giám khảo đọc từng câu hỏi bằng giọng nói. Bạn trả lời bằng micro rồi bấm Câu tiếp.</p><div class=row><button class=b id=st>Vào phòng thi</button><button class="b g" id=cm>Bật camera</button></div><div id=ro hidden><p id=q class=qq></p>${mbox(0)}<button class=b id=nx>Câu tiếp</button></div></div>`;
+const ask=()=>{const[p,q]=Q[i];$('#q').textContent='Part '+p+': '+q;$('#tx').value='';sec=0;$('#inf').textContent='';$('#nx').textContent=i<Q.length-1?'Câu tiếp':'Kết thúc và chấm';try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(q);u.lang='en-GB';speechSynthesis.speak(u)}catch(e){}};
+$('#cm').onclick=cam;$('#st').onclick=()=>{$('#ro').hidden=0;$('#st').hidden=1;ask()};$('#mc').onclick=()=>mic($('#tx'),$('#mc'),$('#inf'));
+$('#nx').onclick=async()=>{if(rc)R.stop();an.push('Q: '+Q[i][1]+'\nA: '+$('#tx').value);i++;if(i<Q.length)return ask();$('#ro').hidden=1;$('#rs').innerHTML='<p class=mu>Giám khảo đang chấm…</p>';show(await grade('Speaking','Phỏng vấn 3 phần',an.join('\n\n')),$('#rs'),'speaking','sp')}}
+
+/* THI THỬ */
+const T={Reading:{m:10,s:'In the past decade, keeping bees on city rooftops has moved from a quirky hobby to a serious movement. Cities offer a surprising advantage: gardens, parks and balconies provide flowers across a long season, while fewer pesticides are sprayed than on farms. In London, some hives produce more honey than rural ones. However, experts warn that the number of hives is growing faster than the supply of flowers. When too many bees compete for nectar, wild pollinators such as bumblebees may lose out. Several councils now ask beekeepers to register their hives and to plant more flowering trees. Supporters argue that the practice raises public awareness of pollinators, even if it does little to protect them directly.',q:[['Urban hives always produce less honey than rural hives.',['True','False','Not Given'],1,'Bài nói một số tổ ở London cho nhiều mật hơn tổ ở nông thôn.'],['Cities use fewer pesticides than farms.',['True','False','Not Given'],0,'Bài nêu thành phố phun ít thuốc trừ sâu hơn nông trại.'],['Rooftop beekeeping began in London.',['True','False','Not Given'],2,'Bài không nói nó bắt đầu ở đâu.'],['What is the experts’ main concern?',['Honey is too expensive','Hives are growing faster than flowers','Councils ban hives'],1,'Câu “growing faster than the supply of flowers”.'],['According to supporters, the main benefit is…',['direct protection of bees','more honey','greater public awareness'],2,'Supporters nhấn mạnh nâng cao nhận thức.']]},
+Listening:{m:5,s:'Good morning. This is the Riverside Sports Centre. The swimming pool is open from six thirty to nine in the evening on weekdays. On Saturdays it closes earlier, at five. A monthly pass costs forty five dollars, and students receive a twenty percent discount. To join, you need to bring a photo ID. Classes for beginners start next Monday at seven.',q:[['What time does the pool close on weekdays?',['8 p.m.','9 p.m.','9.30 p.m.'],1,'“nine in the evening”.'],['What time does it close on Saturdays?',['5 p.m.','6 p.m.','7 p.m.'],0,'“at five”.'],['How much does a student pay per month?',['$45','$36','$9'],1,'45 trừ 20% là 36.'],['What must new members bring?',['A photo ID','A swimming cap','A student card'],0,'“bring a photo ID”.']]}};
+const bd=p=>[[.9,8.5],[.8,7.5],[.7,6.5],[.6,6],[.5,5.5],[.4,5],[.3,4.5],[0,4]].find(x=>p>=x[0])[1];
+P.mock=()=>{AP.innerHTML=`<h1>Thi thử</h1><div class=c><div class=g2><label>Kỹ năng<select id=k><option>Reading<option>Listening</select></label><label>Chế độ<select id=md><option value=p>Luyện tập<option value=e>Exam Mode: toàn màn hình, giám sát, hết giờ tự nộp</select></label></div><p class=mu>Writing và Speaking có phòng riêng ở trên, đã có chấm AI. Đề mẫu ở đây do mình soạn, không chép nội dung sách Cambridge.</p><div class=row><button class=b id=go>Bắt đầu</button><button class="b g" id=cm>Bật camera giám sát</button></div></div>`;$('#cm').onclick=cam;$('#go').onclick=()=>run($('#k').value,$('#md').value=='e')};
+function run(k,ex){const t=T[k];let left=t.m*60,pl=0,vi=0,iv;const vh=()=>{if(document.hidden){vi++;$('#vi').textContent='Rời tab: '+vi+' lần'}};
+if(ex){try{document.documentElement.requestFullscreen()}catch(e){}document.addEventListener('visibilitychange',vh)}
+AP.innerHTML=`<div class=row style="justify-content:space-between"><h1>${k}${ex?' · Exam':''}</h1><b id=tm class=bn></b></div>${ex?'<p class=mu id=vi>Rời tab: 0 lần. Hệ thống ghi lại mỗi lần bạn rời bài.</p>':''}${k=='Reading'?`<div class="c ${ex?'nc':''}">${E(t.s)}</div>`:`<div class=c><button class=b id=pl>Nghe</button> <span class=mu>${ex?'Chỉ nghe 1 lần':'Nghe tối đa 3 lần'}</span></div>`}${t.q.map((q,i)=>`<div class=c><b>${i+1}. ${E(q[0])}</b>${q[1].map((o,j)=>`<label style="display:block"><input type=radio name=q${i} value=${j} style="width:auto"> ${E(o)}</label>`).join('')}</div>`).join('')}<button class=b id=sb>Nộp bài</button><div id=rs></div>`;
+if(ex)AP.oncopy=e=>e.preventDefault();
+if(k=='Listening')$('#pl').onclick=()=>{if(pl>=(ex?1:3))return toast('Hết lượt nghe');pl++;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.s);u.lang='en-GB';u.rate=.9;speechSynthesis.speak(u)}catch(e){toast('Trình duyệt không đọc được audio')}};
+const fm=()=>$('#tm').textContent=String(Math.floor(left/60)).padStart(2,0)+':'+String(left%60).padStart(2,0);fm();
+const sub=()=>{clearInterval(iv);document.removeEventListener('visibilitychange',vh);AP.oncopy=null;try{speechSynthesis.cancel();if(document.fullscreenElement)document.exitFullscreen()}catch(e){}
+let n=0;t.q.forEach((q,i)=>{const c=document.querySelector(`input[name=q${i}]:checked`);if(c&&+c.value===q[2])n++});const b=bd(n/t.q.length);S.sc[k.toLowerCase()]=b;mark('m');$('#sb').hidden=1;
+$('#rs').innerHTML=`<div class=c><p class=bn>${n}/${t.q.length} · Band ước tính <span class=hl>${b}</span></p><p class=mu>Quy đổi theo tỉ lệ đúng, chỉ mang tính tham khảo.${ex?' Số lần rời tab: '+vi+'.':''}</p></div>`+t.q.map((q,i)=>`<div class=c><b>${i+1}. Đáp án: ${E(q[1][q[2]])}</b><br><span class=mu>${E(q[3])}</span></div>`).join('')+(k=='Listening'?`<div class=c><h2>Transcript</h2>${E(t.s)}</div>`:'')};
+$('#sb').onclick=sub;iv=setInterval(()=>{left--;fm();if(left<=0)sub()},1000)}
+
+/* BAND CALCULATOR */
+P.tools=()=>{AP.innerHTML=`<h1>Band Calculator</h1><div class=c><div class=g2>${['Listening','Reading','Writing','Speaking'].map(k=>`<label>${k}<input type=number min=0 max=9 step=.5 class=bc></label>`).join('')}</div><p class=bn id=ov></p><p class=mu>Làm tròn theo chuẩn IELTS: .25 lên .5, .75 lên band kế tiếp. Dùng không giới hạn.</p></div>`;
+const f=()=>{const v=[...document.querySelectorAll('.bc')].map(x=>x.value);if(v.some(x=>x===''))return $('#ov').textContent='';const a=v.reduce((s,x)=>s+ +x,0)/4,fl=Math.floor(a),d=a-fl;$('#ov').innerHTML='Overall <span class=hl>'+(d<.25?fl:d<.75?fl+.5:fl+1).toFixed(1)+'</span>'};document.querySelectorAll('.bc').forEach(x=>x.oninput=f)};
+
+/* HỎI AI + NGỮ PHÁP */
+P.chat=()=>{const H=[];AP.innerHTML=`<h1>Hỏi AI</h1><div class=row>${['Giải thích thì hiện tại hoàn thành','Cách mở bài Task 2 dạng Discuss both views','Mệnh đề quan hệ dùng thế nào trong Writing','Mẹo trả lời Part 2 khi bí ý','Collocation chủ đề Environment'].map(x=>`<button class="b g">${x}</button>`).join('')}</div><div id=lg style="margin:12px 0"></div><div class=row><input id=qi placeholder="Bạn đang kẹt chỗ nào?" style="flex:1"><button class=b id=sd>Gửi</button></div>`;
+const send=async q=>{if(!q)return;$('#qi').value='';$('#lg').insertAdjacentHTML('beforeend',`<div class=c><b>Bạn:</b> ${E(q)}</div>`);const d=document.createElement('div');d.className='c';d.style.whiteSpace='pre-wrap';d.textContent='Đang trả lời…';$('#lg').append(d);
+H.push({role:'user',content:(H.length?'':'Bạn là gia sư IELTS thân thiện. Trả lời bằng tiếng Việt, ngắn gọn, có ví dụ tiếng Anh, hỏi lại để kiểm tra mình hiểu chưa.\n\n')+q});
+try{const sm=window.claude&&await window.claude.use('sample');if(!sm)throw 0;const r=await sm(H,{cache:false,onText:({text})=>d.textContent=text});H.push({role:'assistant',content:r.text});d.textContent=r.text}catch(e){H.pop();d.textContent='Chưa kết nối được AI. Hãy mở trang này trong Claude và cho phép AI trả lời.'}};
+document.querySelectorAll('.row .b.g').forEach(b=>b.onclick=()=>send(b.textContent));$('#sd').onclick=()=>send($('#qi').value.trim());$('#qi').onkeydown=e=>{if(e.key==='Enter')send($('#qi').value.trim())}};
+hd();go();
+</script></body></html>
